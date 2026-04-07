@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daraa Challenge - 30 Hari Perubahan Diri</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #20B2AA;
+            --primary-dark: #008B8B;
+            --secondary: #F0FFF4;
+            --accent: #FF6B6B;
+            --text: #2D3748;
+            --text-light: #718096;
+            --bg: #F7FAFC;
+            --card: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --text: #E2E8F0;
+            --text-light: #A0AEC0;
+            --bg: #1A202C;
+            --card: #2D3748;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .quote-box {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 15px;
+            font-style: italic;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .nav-tab {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px 20px;
+            background: var(--card);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+            color: var(--text);
+        }
+
+        .nav-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary-dark);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-dark);
+        }
+
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .day-cell {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .day-cell:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .day-cell.completed {
+            background: linear-gradient(135deg, #48BB78 0%, #38A169 100%);
+            color: white;
+        }
+
+        .day-cell.today {
+            border-color: var(--primary);
+            border-width: 3px;
+        }
+
+        .day-number {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .day-status {
+            font-size: 0.6rem;
+            margin-top: 2px;
+        }
+
+        /* Progress Ring */
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: var(--bg);
+            stroke-width: 8;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: var(--primary);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: var(--card);
+            color: var(--text);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(32, 178, 170, 0.1);
+        }
+
+        /* Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--bg);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--primary);
+        }
+
+        .checkbox-item.checked {
+            background: var(--secondary);
+            border-color: var(--primary);
+        }
+
+        .checkbox-icon {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .checkbox-item.checked .checkbox-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Timer */
+        .timer-display {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--primary);
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: #E2E8F0;
+        }
+
+        .btn-danger {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Workout List */
+        .workout-list {
+            list-style: none;
+        }
+
+        .workout-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg);
+            margin-bottom: 8px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .workout-item:hover {
+            transform: translateX(5px);
+        }
+
+        .workout-item i {
+            color: var(--primary);
+            margin-right: 12px;
+        }
+
+        .editable-list .workout-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        /* Meal Cards */
+        .meal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .meal-card {
+            background: var(--bg);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .meal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .meal-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .meal-info {
+            padding: 12px;
+        }
+
+        .meal-type {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .meal-time {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        /* Recipe Section */
+        .recipe-card {
+            background: var(--bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .recipe-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .recipe-content {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            background: var(--primary-dark);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        /* Streak Badge */
+        .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(135deg, #FF6B6B 0%, #EE5A24 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .calendar-grid {
+                gap: 5px;
+            }
+            
+            .day-cell {
+                font-size: 0.8rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Hidden sections */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Confetti Animation */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            position: absolute;
+            animation: fall linear forwards;
+            z-index: 9999;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .success-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: #48BB78;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: var(--shadow-lg);
+            z-index: 2000;
+            transition: transform 0.3s ease;
+        }
+
+        .success-message.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="header">
+        <h1><i class="fas fa-leaf"></i> Daraa Challenge</h1>
+        <p>30 Hari Perubahan Diri</p>
+        <div class="quote-box" id="dailyQuote">
+            "Lebih baik belajar ko pelan-pelan tidur lebih awal, bangun sebelum subuh, trus workout mandi."
+        </div>
+        <div style="margin-top: 15px;">
+            <span class="streak-badge">
+                <i class="fas fa-fire"></i>
+                <span id="streakCount">0</span> Hari Streak
+            </span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('dashboard')">
+                <i class="fas fa-calendar-alt"></i> Dashboard
+            </button>
+            <button class="nav-tab" onclick="showSection('sleep')">
+                <i class="fas fa-bed"></i> Tidur
+            </button>
+            <button class="nav-tab" onclick="showSection('workout')">
+                <i class="fas fa-dumbbell"></i> Workout
+            </button>
+            <button class="nav-tab" onclick="showSection('meals')">
+                <i class="fas fa-utensils"></i> Makanan
+            </button>
+            <button class="nav-tab" onclick="showSection('recipes')">
+                <i class="fas fa-book-open"></i> Resep
+            </button>
+            <button class="nav-tab" onclick="showSection('stats')">
+                <i class="fas fa-chart-bar"></i> Statistik
+            </button>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section active">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-calendar-check"></i>
+                    Kalender 30 Hari
+                </h2>
+                <div class="progress-ring">
+                    <svg width="120" height="120">
+                        <circle class="progress-ring-bg" cx="60" cy="60" r="52"/>
+                        <circle class="progress-ring-fill" id="progressCircle" cx="60" cy="60" r="52" 
+                                stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
+                    </svg>
+                    <div class="progress-text" id="progressPercent">0%</div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-check-circle"></i>
+                    Ceklis Hari Ini
+                </h2>
+                <div class="checkbox-group">
+                    <div class="checkbox-item" id="checkSleep" onclick="toggleCheck('sleep')">
+                        <div class="checkbox-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">Bangun Sebelum Subuh</div>
+                            <div style="font-size: 0.85rem; color: var(--text-light);">Target: 04:00 - 05:30</div>
+                        </div>
+                    </div>
+                    <div class="checkbox-item" id="checkWorkout" onclick="toggleCheck('workout')">
+                        <div class="checkbox-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">Workout Selesai</div>
+                            <div style="font-size: 0.85rem; color: var(--text-light);">20-30 menit circuit</div>
+                        </div>
+                    </div>
+                    <div class="checkbox-item" id="checkMeal" onclick="toggleCheck('meal')">
+                        <div class="checkbox-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">Makan Sehat</div>
+                            <div style="font-size: 0.85rem; color: var(--text-light);">3x makan + camilan sehat</div>
+                        </div>
+                    </div>
+                    <div class="checkbox-item" id="checkSleepEarly" onclick="toggleCheck('sleepEarly')">
+                        <div class="checkbox-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">Tidur Malam</div>
+                            <div style="font-size: 0.85rem; color: var(--text-light);">Sebelum jam 22:00</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="completeDay()">
+                    <i class="fas fa-save"></i> Simpan Progress Hari Ini
+                </button>
+            </div>
+        </div>
+
+        <!-- Sleep Section -->
+        <div id="sleep" class="section">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-moon"></i>
+                    Tracker Tidur
+                </h2>
+                <div class="form-group">
+                    <label class="form-label">Jam Tidur Malam</label>
+                    <input type="time" class="form-input" id="bedTime" onchange="saveSleepData()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Jam Bangun Pagi</label>
+                    <input type="time" class="form-input" id="wakeTime" onchange="saveSleepData()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Durasi Tidur</label>
+                    <div id="sleepDuration" style="font-size: 1.2rem; color: var(--primary); font-weight: 600;">-</div>
+                </div>
+                <div class="checkbox-item checked" style="margin-top: 15px;">
+                    <div class="checkbox-icon" style="background: var(--primary); color: white;">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600;">Bangun Sebelum Subuh</div>
+                        <div style="font-size: 0.85rem; color: var(--text-light);">Target: 04:00 - 05:30</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-history"></i>
+                    Riwayat Tidur
+                </h2>
+                <div id="sleepHistory">
+                    <p style="color: var(--text-light); text-align: center; padding: 20px;">
+                        Belum ada data tidur tercatat
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workout Section -->
+        <div id="workout" class="section">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-stopwatch"></i>
+                    Timer Workout
+                </h2>
+                <div class="timer-display" id="timerDisplay">00:00</div>
+                <div class="timer-controls">
+                    <button class="btn btn-primary" onclick="startTimer()">
+                        <i class="fas fa-play"></i> Mulai
+                    </button>
+                    <button class="btn btn-secondary" onclick="pauseTimer()">
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                    <button class="btn btn-danger" onclick="resetTimer()">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+                <div style="margin-top: 20px; text-align: center;">
+                    <label class="form-label">Target Durasi (menit)</label>
+                    <input type="number" class="form-input" id="targetMinutes" value="20" min="1" max="60" 
+                           style="max-width: 100px; text-align: center; margin: 0 auto; display: block;">
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-list-ul"></i>
+                    Rutinitas Workout
+                </h2>
+                <ul class="workout-list" id="workoutList">
+                    <li class="workout-item">
+                        <i class="fas fa-fire"></i>
+                        <span>Pemanasan (5 menit)</span>
+                    </li>
+                    <li class="workout-item">
+                        <i class="fas fa-running"></i>
+                        <span>Squats - 3 set x 15 reps</span>
+                    </li>
+                    <li class="workout-item">
+                        <i class="fas fa-hand-rock"></i>
+                        <span>Push-ups - 3 set x 10 reps</span>
+                    </li>
+                    <li class="workout-item">
+                        <i class="fas fa-walking"></i>
+                        <span>Lunges - 3 set x 12 reps per kaki</span>
+                    </li>
+                    <li class="workout-item">
+                        <i class="fas fa-minus"></i>
+                        <span>Plank - 3 set x 30 detik</span>
+                    </li>
+                    <li class="workout-item">
+                        <i class="fas fa-superpowers"></i>
+                        <span>Superman - 3 set x 12 reps</span>
+                    </li>
+                    <li class="workout-item">
+                        <i class="fas fa-mountain"></i>
+                        <span>Mountain Climbers - 3 set x 20 reps</span>
+                    </li>
+                    <li class="workout-item">
+                        <i class="fas fa-wind"></i>
+                        <span>Pendinginan (5 menit)</span>
+                    </li>
+                </ul>
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;" onclick="openWorkoutModal()">
+                    <i class="fas fa-edit"></i> Edit Rutinitas
+                </button>
+            </div>
+        </div>
+
+        <!-- Meals Section -->
+        <div id="meals" class="section">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-plus-circle"></i>
+                    Log Makanan Hari Ini
+                </h2>
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 20px;" 
+                        onclick="openMealForm()">
+                    <i class="fas fa-camera"></i> Tambah Foto Makanan
+                </button>
+                
+                <div class="form-group">
+                    <label class="form-label">Jenis Makanan</label>
+                    <select class="form-input" id="mealType">
+                        <option value="sarapan">Sarapan</option>
+                        <option value="siang">Makan Siang</option>
+                        <option value="malam">Makan Malam</option>
+                        <option value="camilan">Camilan</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Deskripsi Makanan</label>
+                    <input type="text" class="form-input" id="mealDesc" placeholder="Contoh: Nasi + Tempe + Telur">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Jam Makan</label>
+                    <input type="time" class="form-input" id="mealTime">
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="addMeal()">
+                    <i class="fas fa-save"></i> Simpan Makanan
+                </button>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-utensils"></i>
+                    Log Makanan Hari Ini
+                </h2>
+                <div class="meal-grid" id="mealGrid">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Recipes Section -->
+        <div id="recipes" class="section">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-book-open"></i>
+                    Resep Makanan Sehat
+                </h2>
+                
+                <div class="recipe-card">
+                    <div class="recipe-title">
+                        <i class="fas fa-sun"></i>
+                        Sarapan: Telur & Tempe
+                    </div>
+                    <div class="recipe-content">
+                        <strong>Bahan:</strong><br>
+                        • 2 butir telur (orak-arik/rebus)<br>
+                        • 2 potong tempe goreng/panggang<br>
+                        • 1 cup nasi putih<br>
+                        • Sambal tomat (opsional)<br><br>
+                        <strong>Tips:</strong> Gunakan minyak kelapa/minyak zaitun secukupnya. Bisa tambah sayur rebus.
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-title">
+                        <i class="fas fa-cloud-sun"></i>
+                        Makan Siang: Ikan & Nasi
+                    </div>
+                    <div class="recipe-content">
+                        <strong>Bahan:</strong><br>
+                        • 1 ekor ikan kembung/gurame (panggang/goreng)<br>
+                        • 1 cup nasi putih<br>
+                        • Tumis kangkung/bayam<br>
+                        • Sambal terasi<br><br>
+                        <strong>Tips:</strong> Ikan panggang lebih sehat. Bumbui dengan bawang putih, jahe, dan kecap asin.
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-title">
+                        <i class="fas fa-moon"></i>
+                        Makan Malam: Ayam & Sayur
+                    </div>
+                    <div class="recipe-content">
+                        <strong>Bahan:</strong><br>
+                        • 100gr dada ayam (rebus/panggang)<br>
+                        • 1/2 cup nasi (porsi lebih sedikit)<br>
+                        • Sup sayur (wortel, kol, daun bawang)<br>
+                        • Tempe rebus/kukus<br><br>
+                        <strong>Tips:</strong> Makan malam sebelum jam 19:00. Kurangi karbohidrat di malam hari.
+                    </div>
+                </div>
+
+                <div class="recipe-card">
+                    <div class="recipe-title">
+                        <i class="fas fa-cookie-bite"></i>
+                        Camilan Sehat
+                    </div>
+                    <div class="recipe-content">
+                        <strong>Pilihan:</strong><br>
+                        • Buah-buahan (pisang, apel, pepaya)<br>
+                        • Kacang-kacangan (almond, kenari)<br>
+                        • Yogurt plain tanpa gula<br>
+                        • Smoothie (pisang + susu + madu)<br>
+                        • Tempe rebus dengan sedikit garam<br><br>
+                        <strong>Tips:</strong> Camilan antara jam 10:00 atau 15:00. Hindari gorengan dan yang manis-manis.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div id="stats" class="section">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-chart-pie"></i>
+                    Ringkasan 30 Hari
+                </h2>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-value" id="statDays">0</span>
+                        <div class="stat-label">Hari Selesai</div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-value" id="statWorkouts">0</span>
+                        <div class="stat-label">Total Workout</div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-value" id="statStreak">0</span>
+                        <div class="stat-label">Streak Tertinggi</div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-value" id="statMeals">0</span>
+                        <div class="stat-label">Makanan Tercatat</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-clock"></i>
+                    Rata-rata Waktu Bangun
+                </h2>
+                <div style="text-align: center; padding: 30px;">
+                    <div style="font-size: 3rem; color: var(--primary); font-weight: bold;" id="avgWakeTime">--:--</div>
+                    <div style="color: var(--text-light); margin-top: 10px;">
+                        Target: 04:00 - 05:30
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-download"></i>
+                    Backup Data
+                </h2>
+                <p style="margin-bottom: 15px; color: var(--text-light);">
+                    Export data Anda untuk backup atau pindah ke perangkat lain.
+                </p>
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;" onclick="exportData()">
+                    <i class="fas fa-download"></i> Export Data (JSON)
+                </button>
+                <button class="btn btn-secondary" style="width: 100%;" onclick="document.getElementById('importFile').click()">
+                    <i class="fas fa-upload"></i> Import Data
+                </button>
+                <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importData(this)">
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="fab" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Workout Edit Modal -->
+    <div class="modal" id="workoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Rutinitas Workout</h3>
+                <button class="close-modal" onclick="closeWorkoutModal()">&times;</button>
+            </div>
+            <div class="editable-list" id="editableWorkoutList">
+                <!-- Generated by JS -->
+            </div>
+            <div style="margin-top: 20px;">
+                <input type="text" class="form-input" id="newExercise" placeholder="Tambah latihan baru...">
+                <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="addExercise()">
+                    <i class="fas fa-plus"></i> Tambah
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-message" id="successMessage">
+        <i class="fas fa-check-circle"></i> Berhasil disimpan!
+    </div>
+
+    <script>
+        // Data Management
+        let appData = {
+            days: {},
+            workouts: [
+                "Pemanasan (5 menit)",
+                "Squats - 3 set x 15 reps",
+                "Push-ups - 3 set x 10 reps",
+                "Lunges - 3 set x 12 reps per kaki",
+                "Plank - 3 set x 30 detik",
+                "Superman - 3 set x 12 reps",
+                "Mountain Climbers - 3 set x 20 reps",
+                "Pendinginan (5 menit)"
+            ],
+            meals: {},
+            currentStreak: 0,
+            longestStreak: 0
+        };
+
+        // Quotes from Daraa
+        const quotes = [
+            "Lebih baik belajar ko pelan-pelan tidur lebih awal, bangun sebelum subuh, trus workout mandi.",
+            "Konsisten itu lebih penting dari sempurna.",
+            "Satu hari lebih baik dari kemarin.",
+            "Tidur cukup, bangun segar, workout ringan.",
+            "Makanan simpel tapi bergizi itu cukup.",
+            "Jangan lupa bersyukur setiap hari."
+        ];
+
+        // Timer variables
+        let timerInterval;
+        let timerSeconds = 0;
+        let isTimerRunning = false;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            initCalendar();
+            updateQuote();
+            updateStats();
+            updateMealGrid();
+            updateSleepHistory();
+            checkTheme();
+            
+            // Set current time for meal
+            const now = new Date();
+            const timeString = now.toTimeString().slice(0, 5);
+            document.getElementById('mealTime').value = timeString;
+        });
+
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            const icon = document.querySelector('.theme-toggle i');
+            icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        function checkTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const icon = document.querySelector('.theme-toggle i');
+            icon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active to clicked tab
+            event.target.closest('.nav-tab').classList.add('active');
+            
+            // Update specific section data
+            if (sectionId === 'stats') updateStats();
+            if (sectionId === 'meals') updateMealGrid();
+        }
+
+        // Calendar
+        function initCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            
+            const today = new Date().getDate();
+            
+            for (let i = 1; i <= 30; i++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'day-cell';
+                if (appData.days[i] && appData.days[i].completed) {
+                    dayCell.classList.add('completed');
+                }
+                if (i === today) {
+                    dayCell.classList.add('today');
+                }
+                
+                dayCell.innerHTML = `
+                    <span class="day-number">${i}</span>
+                    ${appData.days[i] && appData.days[i].completed ? '<span class="day-status"><i class="fas fa-check"></i></span>' : ''}
+                `;
+                
+                dayCell.onclick = () => selectDay(i);
+                grid.appendChild(dayCell);
+            }
+            
+            updateProgressRing();
+        }
+
+        function selectDay(day) {
+            // Could show day details in modal
+            showSuccess(`Hari ${day} dipilih`);
+        }
+
+        function updateProgressRing() {
+            const completed = Object.values(appData.days).filter(d => d.completed).length;
+            const percent = (completed / 30) * 100;
+            const circle = document.getElementById('progressCircle');
+            const radius = 52;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (percent / 100) * circumference;
+            
+            circle.style.strokeDashoffset = offset;
+            document.getElementById('progressPercent').textContent = Math.round(percent) + '%';
+        }
+
+        // Checkboxes
+        function toggleCheck(type) {
+            const element = document.getElementById('check' + type.charAt(0).toUpperCase() + type.slice(1));
+            element.classList.toggle('checked');
+        }
+
+        function completeDay() {
+            const today = new Date().getDate();
+            const sleep = document.getElementById('checkSleep').classList.contains('checked');
+            const workout = document.getElementById('checkWorkout').classList.contains('checked');
+            const meal = document.getElementById('checkMeal').classList.contains('checked');
+            const sleepEarly = document.getElementById('checkSleepEarly').classList.contains('checked');
+            
+            if (!appData.days[today]) {
+                appData.days[today] = {};
+            }
+            
+            appData.days[today] = {
+                ...appData.days[today],
+                completed: sleep && workout && meal && sleepEarly,
+                sleep,
+                workout,
+                meal,
+                sleepEarly,
+                date: new Date().toISOString()
+            };
+            
+            // Update streak
+            if (appData.days[today].completed) {
+                appData.currentStreak++;
+                if (appData.currentStreak > appData.longestStreak) {
+                    appData.longestStreak = appData.currentStreak;
+                }
+                createConfetti();
+            } else {
+                appData.currentStreak = 0;
+            }
+            
+            document.getElementById('streakCount').textContent = appData.currentStreak;
+            
+            saveData();
+            initCalendar();
+            showSuccess('Progress hari ini tersimpan!');
+        }
+
+        // Sleep Tracker
+        function saveSleepData() {
+            const bedTime = document.getElementById('bedTime').value;
+            const wakeTime = document.getElementById('wakeTime').value;
+            
+            if (bedTime && wakeTime) {
+                const bed = new Date(`2000-01-01T${bedTime}`);
+                let wake = new Date(`2000-01-01T${wakeTime}`);
+                
+                if (wake < bed) {
+                    wake.setDate(wake.getDate() + 1);
+                }
+                
+                const diffMs = wake - bed;
+                const diffHrs = Math.floor(diffMs / 3600000);
+                const diffMins = Math.round((diffMs % 3600000) / 60000);
+                
+                document.getElementById('sleepDuration').textContent = `${diffHrs} jam ${diffMins} menit`;
+                
+                const today = new Date().getDate();
+                if (!appData.days[today]) appData.days[today] = {};
+                appData.days[today].sleepData = { bedTime, wakeTime, duration: `${diffHrs}j ${diffMins}m` };
+                saveData();
+                updateSleepHistory();
+            }
+        }
+
+        function updateSleepHistory() {
+            const history = document.getElementById('sleepHistory');
+            const daysWithSleep = Object.entries(appData.days).filter(([_, data]) => data.sleepData);
+            
+            if (daysWithSleep.length === 0) return;
+            
+            history.innerHTML = daysWithSleep.slice(-7).map(([day, data]) => `
+                <div style="display: flex; justify-content: space-between; padding: 10px; background: var(--bg); 
+                            margin-bottom: 8px; border-radius: 10px;">
+                    <span>Hari ${day}</span>
+                    <span style="color: var(--primary); font-weight: 600;">
+                        ${data.sleepData.wakeTime} (${data.sleepData.duration})
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        // Timer
+        function startTimer() {
+            if (!isTimerRunning) {
+                isTimerRunning = true;
+                timerInterval = setInterval(() => {
+                    timerSeconds++;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timerSeconds = 0;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+            const secs = (timerSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('timerDisplay').textContent = `${mins}:${secs}`;
+        }
+
+        // Workout Edit
+        function openWorkoutModal() {
+            document.getElementById('workoutModal').classList.add('active');
+            renderEditableWorkoutList();
+        }
+
+        function closeWorkoutModal() {
+            document.getElementById('workoutModal').classList.remove('active');
+        }
+
+        function renderEditableWorkoutList() {
+            const list = document.getElementById('editableWorkoutList');
+            list.innerHTML = appData.workouts.map((exercise, index) => `
+                <div class="workout-item">
+                    <span>${exercise}</span>
+                    <button class="delete-btn" onclick="removeExercise(${index})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function addExercise() {
+            const input = document.getElementById('newExercise');
+            if (input.value.trim()) {
+                appData.workouts.push(input.value.trim());
+                input.value = '';
+                saveData();
+                renderEditableWorkoutList();
+                updateWorkoutList();
+            }
+        }
+
+        function removeExercise(index) {
+            appData.workouts.splice(index, 1);
+            saveData();
+            renderEditableWorkoutList();
+            updateWorkoutList();
+        }
+
+        function updateWorkoutList() {
+            const list = document.getElementById('workoutList');
+            list.innerHTML = appData.workouts.map(exercise => {
+                let icon = 'fa-dumbbell';
+                if (exercise.includes('Pemanasan') || exercise.includes('Pendinginan')) icon = 'fa-wind';
+                else if (exercise.includes('Squat')) icon = 'fa-running';
+                else if (exercise.includes('Push')) icon = 'fa-hand-rock';
+                else if (exercise.includes('Lunges')) icon = 'fa-walking';
+                else if (exercise.includes('Plank')) icon = 'fa-minus';
+                else if (exercise.includes('Superman')) icon = 'fa-superpowers';
+                else if (exercise.includes('Mountain')) icon = 'fa-mountain';
+                
+                return `
+                    <li class="workout-item">
+                        <i class="fas ${icon}"></i>
+                        <span>${exercise}</span>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        // Meals
+        function openMealForm() {
+            // In real implementation, this would open camera/file picker
+            showSuccess('Fitur kamera aktif (simulasi)');
+        }
+
+        function addMeal() {
+            const type = document.getElementById('mealType').value;
+            const desc = document.getElementById('mealDesc').value;
+            const time = document.getElementById('mealTime').value;
+            
+            if (!desc) {
+                alert('Mohon isi deskripsi makanan');
+                return;
+            }
+            
+            const today = new Date().getDate();
+            if (!appData.meals[today]) {
+                appData.meals[today] = [];
+            }
+            
+            appData.meals[today].push({
+                type,
+                desc,
+                time,
+                timestamp: new Date().toISOString()
+            });
+            
+            saveData();
+            updateMealGrid();
+            
+            // Reset form
+            document.getElementById('mealDesc').value = '';
+            showSuccess('Makanan tersimpan!');
+        }
+
+        function updateMealGrid() {
+            const grid = document.getElementById('mealGrid');
+            const today = new Date().getDate();
+            const meals = appData.meals[today] || [];
+            
+            if (meals.length === 0) {
+                grid.innerHTML = '<p style="color: var(--text-light); text-align: center; grid-column: 1/-1;">Belum ada makanan tercatat hari ini</p>';
+                return;
+            }
+            
+            const typeIcons = {
+                sarapan: 'fa-sun',
+                siang: 'fa-cloud-sun',
+                malam: 'fa-moon',
+                camilan: 'fa-cookie-bite'
+            };
+            
+            const typeLabels = {
+                sarapan: 'Sarapan',
+                siang: 'Makan Siang',
+                malam: 'Makan Malam',
+                camilan: 'Camilan'
+            };
+            
+            grid.innerHTML = meals.map(meal => `
+                <div class="meal-card">
+                    <div class="meal-img">
+                        <i class="fas ${typeIcons[meal.type]}"></i>
+                    </div>
+                    <div class="meal-info">
+                        <div class="meal-type">${typeLabels[meal.type]}</div>
+                        <div style="font-weight: 600; margin-top: 4px;">${meal.desc}</div>
+                        <div class="meal-time"><i class="fas fa-clock"></i> ${meal.time}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Stats
+        function updateStats() {
+            const completed = Object.values(appData.days).filter(d => d.completed).length;
+            const workouts = Object.values(appData.days).filter(d => d.workout).length;
+            const totalMeals = Object.values(appData.meals).flat().length;
+            
+            document.getElementById('statDays').textContent = completed;
+            document.getElementById('statWorkouts').textContent = workouts;
+            document.getElementById('statStreak').textContent = appData.longestStreak;
+            document.getElementById('statMeals').textContent = totalMeals;
+            
+            // Calculate average wake time
+            const wakeTimes = Object.values(appData.days)
+                .filter(d => d.sleepData)
+                .map(d => d.sleepData.wakeTime);
+            
+            if (wakeTimes.length > 0) {
+                // Simple average calculation
+                const avgTime = wakeTimes[Math.floor(wakeTimes.length / 2)];
+                document.getElementById('avgWakeTime').textContent = avgTime;
+            }
+        }
+
+        // Data Persistence
+        function saveData() {
+            localStorage.setItem('daraaChallengeData', JSON.stringify(appData));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('daraaChallengeData');
+            if (saved) {
+                appData = JSON.parse(saved);
+                updateWorkoutList();
+            }
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(appData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `daraa-challenge-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showSuccess('Data berhasil di-export!');
+        }
+
+        function importData(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    appData = data;
+                    saveData();
+                    initCalendar();
+                    updateWorkoutList();
+                    updateStats();
+                    showSuccess('Data berhasil di-import!');
+                } catch (err) {
+                    alert('File tidak valid');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Utilities
+        function updateQuote() {
+            const day = new Date().getDate();
+            const quoteIndex = (day - 1) % quotes.length;
+            document.getElementById('dailyQuote').textContent = `"${quotes[quoteIndex]}"`;
+        }
+
+        function showSuccess(message) {
+            const el = document.getElementById('successMessage');
+            el.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 3000);
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = ['#20B2AA', '#48BB78', '#FF6B6B', '#FFD93D'][Math.floor(Math.random() * 4)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('workoutModal');
+            if (event.target === modal) {
+                closeWorkoutModal();
+            }
+        }
+    </script>
+</body>
+</html>
