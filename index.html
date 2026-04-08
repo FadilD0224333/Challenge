@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daraa Challenge - 30 Hari Perubahan Diri</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="manifest" href="/Challenge/manifest.json">
+<meta name="theme-color" content="#20B2AA">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="/Challenge/icon-192.png">
     <style>
         :root {
             --primary: #20B2AA;
@@ -1807,6 +1811,18 @@
                 closePhotoModal();
             }
         }
+    // Register Service Worker untuk PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/Challenge/sw.js')
+      .then(registration => {
+        console.log('Service Worker registered successfully');
+      })
+      .catch(error => {
+        console.error('Service Worker registration failed:', error);
+      });
+  });
+}
     </script>
 </body>
     </html>
